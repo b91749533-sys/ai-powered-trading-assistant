@@ -37,7 +37,7 @@ export default function Dashboard() {
   // Webhook Sender Modal
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
   const [alertSymbol, setAlertSymbol] = useState("BTCUSDT");
-  const [alertPrice, setAlertPrice] = useState("95500");
+  const [alertPrice, setAlertPrice] = useState("61200");
   const [alertSignal, setAlertSignal] = useState("LONG");
   const [alertRsi, setAlertRsi] = useState("64");
   const [alertMacd, setAlertMacd] = useState("bullish crossover");
@@ -418,14 +418,27 @@ export default function Dashboard() {
               <select 
                 value={alertSymbol} 
                 onChange={(e) => {
-                  setAlertSymbol(e.target.value);
-                  setAlertPrice(e.target.value === "BTCUSDT" ? "95500" : e.target.value === "ETHUSDT" ? "3250" : "245");
+                  const val = e.target.value;
+                  setAlertSymbol(val);
+                  let price = "100";
+                  if (val.includes("BTC")) price = "61200";
+                  else if (val.includes("ETH")) price = "3380";
+                  else if (val.includes("SOL")) price = "145";
+                  else if (val.includes("XAUUSD")) price = "2330";
+                  else if (val.includes("USOIL")) price = "80";
+                  else if (val.includes("EURUSD")) price = "1.08";
+                  else if (val.includes("GBPUSD")) price = "1.27";
+                  setAlertPrice(price);
                 }}
                 className="w-full px-3 py-2 bg-[#0B0E11] border border-trading-border rounded-lg text-xs text-white focus:outline-none focus:border-trading-green"
               >
-                <option value="BTCUSDT">BTCUSDT</option>
-                <option value="ETHUSDT">ETHUSDT</option>
-                <option value="SOLUSDT">SOLUSDT</option>
+                <option value="BTCUSDT">BTCUSDT (Crypto)</option>
+                <option value="ETHUSDT">ETHUSDT (Crypto)</option>
+                <option value="SOLUSDT">SOLUSDT (Crypto)</option>
+                <option value="XAUUSD">XAUUSD (Gold/Commodity)</option>
+                <option value="USOIL">USOIL (Crude Oil/Commodity)</option>
+                <option value="EURUSD">EURUSD (EUR/USD Forex)</option>
+                <option value="GBPUSD">GBPUSD (GBP/USD Forex)</option>
               </select>
             </div>
 

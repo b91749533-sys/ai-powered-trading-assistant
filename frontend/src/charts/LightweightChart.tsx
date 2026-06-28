@@ -135,7 +135,17 @@ export default function LightweightChart({ symbol, signals = [] }: LightweightCh
 
   const generateMockData = () => {
     const dataList = [];
-    let price = symbol.includes("BTC") ? 95000 : symbol.includes("ETH") ? 3200 : 250;
+    let price = 100;
+    const s = symbol.toUpperCase();
+    if (s.includes("BTC")) price = 61200;
+    else if (s.includes("ETH")) price = 3380;
+    else if (s.includes("SOL")) price = 145;
+    else if (s.includes("XAU") || s.includes("GOLD")) price = 2330;
+    else if (s.includes("USOIL") || s.includes("CRUDE")) price = 80;
+    else if (s.includes("EUR")) price = 1.08;
+    else if (s.includes("GBP")) price = 1.27;
+    else if (s.includes("USD")) price = 1.0;
+    else price = 250;
     const now = Math.floor(Date.now() / 1000);
     const hour = 3600;
 
