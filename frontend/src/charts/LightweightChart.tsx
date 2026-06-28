@@ -160,12 +160,13 @@ export default function LightweightChart({ symbol, signals = [] }: LightweightCh
           </div>
         </div>
       </div>
-      <div ref={chartContainerRef} className="w-full h-[350px] relative">
+      <div className="w-full h-[350px] relative">
         {!chartLoaded && (
           <div className="absolute inset-0 flex items-center justify-center text-xs text-trading-textSecondary">
             Loading charts module...
           </div>
         )}
+        <div ref={chartContainerRef} className="w-full h-full" />
       </div>
     </div>
   );
