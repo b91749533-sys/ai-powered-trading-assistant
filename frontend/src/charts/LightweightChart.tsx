@@ -18,6 +18,7 @@ export default function LightweightChart({ symbol, signals = [] }: LightweightCh
 
     let chart: any;
     let candlestickSeries: any;
+    let handleResize: (() => void) | null = null;
 
     const loadChart = async () => {
       try {
@@ -60,7 +61,7 @@ export default function LightweightChart({ symbol, signals = [] }: LightweightCh
         candlestickSeries.setData(data);
 
         // Apply custom signal markers
-        const markers = signals.map((s, index) => {
+        const markers = signals.map((s) => {
           // find nearest match in generated time index
           const sTime = new Date(s.time).getTime() / 1000;
           // find closest data point in our series
@@ -77,10 +78,13 @@ export default function LightweightChart({ symbol, signals = [] }: LightweightCh
           };
         });
 
+        // Sort markers strictly ascending by time to prevent assertion failures in lightweight-charts
+        markers.sort((a, b) => (a.time as number) - (b.time as number));
+
         candlestickSeries.setMarkers(markers);
 
         // Handle resize
-        const handleResize = () => {
+        handleResize = () => {
           if (chart && chartContainerRef.current) {
             chart.applyOptions({ width: chartContainerRef.current.clientWidth });
           }
@@ -88,11 +92,6 @@ export default function LightweightChart({ symbol, signals = [] }: LightweightCh
 
         window.addEventListener("resize", handleResize);
         setChartLoaded(true);
-
-        return () => {
-          window.removeEventListener("resize", handleResize);
-          if (chart) chart.remove();
-        };
       } catch (err) {
         console.error("Failed to load lightweight-charts", err);
       }
@@ -101,7 +100,16 @@ export default function LightweightChart({ symbol, signals = [] }: LightweightCh
     loadChart();
 
     return () => {
-      if (chart) chart.remove();
+      if (handleResize) {
+        window.removeEventListener("resize", handleResize);
+      }
+      if (chart) {
+        try {
+          chart.remove();
+        } catch (e) {
+          // Ignore double removal or DOM child removal errors during hot-reload
+        }
+      }
     };
   }, [symbol, signals]);
 
