@@ -56,8 +56,28 @@ export default function LightweightChart({ symbol, signals = [] }: LightweightCh
           wickUpColor: "#00c805",
         });
 
-        // Generate beautiful mock price data for the chart
-        const data = generateMockData();
+        // Fetch live klines from Binance API or fallback to mock data
+        let data: any[] = [];
+        try {
+          const normalizedSymbol = symbol.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+          const response = await fetch(
+            `https://api.binance.com/api/v3/klines?symbol=${normalizedSymbol}&interval=1h&limit=100`
+          );
+          if (response.ok) {
+            const rawKlines = await response.json();
+            data = rawKlines.map((k: any) => ({
+              time: Math.floor(k[0] / 1000),
+              open: parseFloat(k[1]),
+              high: parseFloat(k[2]),
+              low: parseFloat(k[3]),
+              close: parseFloat(k[4]),
+            }));
+          } else {
+            data = generateMockData();
+          }
+        } catch (e) {
+          data = generateMockData();
+        }
         candlestickSeries.setData(data);
 
         // Apply custom signal markers
