@@ -1,0 +1,39 @@
+# Virtual environment
+backend/.venv/
+.venv/
+
+# Environment configurations containing secrets
+.env
+.env.example
+backend/.env
+backend/.env.example
+
+# Seeding script containing default admin login credentials
+backend/seed_db.py
+
+# Node dependencies and compilation bundles
+node_modules/
+frontend/node_modules/
+.next/
+frontend/.next/
+out/
+frontend/out/
+
+# Python caching
+__pycache__/
+backend/__pycache__/
+backend/app/__pycache__/
+backend/app/api/__pycache__/
+backend/app/core/__pycache__/
+backend/app/database/__pycache__/
+backend/app/models/__pycache__/
+backend/app/repositories/__pycache__/
+backend/app/schemas/__pycache__/
+backend/app/services/__pycache__/
+*.pyc
+
+# IDEs & System files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
